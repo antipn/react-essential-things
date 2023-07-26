@@ -1,32 +1,40 @@
 import './App.css';
 import {useEffect, useReducer, useState} from "react";
 import RatingStar from "./components/Rating/RatingStar";
+import DataComponent from "./components/FetchData/DataComponent";
 
-
-function App() {
+function App({login}) {
 
     function useInput(initialValue) {
 
         const [value, setValue] = useState(initialValue);
 
         return [
-            {value, onChange: (e) => setValue(e.target.value)},
-            () => setValue(initialValue)];
+            //так как мы используем кастомный хук который использует прелести useState то мы должны возвращать массив
+            // [0] первое в нем значение переменной
+            // [1] второе как изменять переменную
+            {
+                value, onChange: (e) => setValue(e.target.value)
+            }, //[0]
+            () => setValue(initialValue) //[1] resetColor and resetTitle быдет это вызывать через useInput('default value')!
+        ];
     }
 
 
-    const [titleProps, resetTitle] = useInput("черный");
+    //titleProps и colorProps  будет содержать массив: из элемента и того как его менять!
+    const [titleProps, resetTitle] = useInput("черный по умолчанию");
     const [colorProps, resetColor] = useInput("#000000");
 
     const submit = (e) => {
         e.preventDefault(); //чтобы не перезагрузилась страница
-        alert(`${titleProps.value}, ${colorProps.value}`);
-        resetTitle();
-        resetColor();
+        alert(`${titleProps.value}, ${colorProps.value}`); //сообщение с кнопкой OK
+        //далее сбрасываем на значения по умолчанию
+        resetTitle(); //будет вызван useInput("черный по умолчанию"); так как resetTitle => на кастомный хук
+        resetColor(); //useInput("#000000"); так как resetColor => на кастомный хук
 
 
     }
-    const [data, setData] = useState([]);
+    const [users, setUsers] = useState([]);
     const [isError, setIsError] = useState(false);
 
     //[] - loading data only once in the first render
@@ -39,7 +47,7 @@ function App() {
                     let response = await fetch(`https://api.github.com/users1`);
                     if (response.status === 200) {
                         let data = await response.json();
-                        setData(data);
+                        setUsers(data);
                     } else {
                         throw "Не удалось загрузить пользователей.";
                     }
@@ -106,12 +114,11 @@ function App() {
                 <p>1 Working with custom Hook</p>
                 <form onSubmit={submit}>
                     <input
-                        /*вместе значений почему то сделали там, по другому не работает при использование не хук нужно будет опредлить value и значение onChange */
-
                         // defaultValue={titleProps.value.toString()}
                         // onChange={(event) => (resetTitle())} так сделать нельзя
-                        {...titleProps}
-                        type="text" placeholder="type color"></input>
+                        {...titleProps} //потому что у нас тут массив c value and onChange!!!
+                        type="text"
+                        placeholder="type color"></input>
 
                     <input
                         {...colorProps}
@@ -129,9 +136,9 @@ function App() {
             <div className="App">
                 <p>3 useEffect - loading data from api</p>
                 {isError && <p>Пользователи не загружены</p>}
-                <button onClick={() => setData([])}>Убрать пользователей</button>
+                <button onClick={() => setUsers([])}>Убрать пользователей</button>
                 <ul>
-                    {data.map(user => (<li key={user.id}>
+                    {users.map(user => (<li key={user.id}>
                             {user.login}
                         </li>)
                     )}
@@ -152,7 +159,7 @@ function App() {
             </div>
 
             <div className="App">
-                <p>5 Complex Reducer</p>
+                <p>6 Complex Reducer</p>
                 <input
                     type="checkbox"
                     value={checked.toString()}
@@ -163,13 +170,22 @@ function App() {
             </div>
 
             <div className="App">
-                <p>6 Complex Reducer with actions</p>
+                <p>7 Complex Reducer with actions</p>
 
                 <p>Сообщение: {state.message}</p>
                 <button onClick={() => dispatch({type: "upper"})}>Заглавными</button>
                 <button onClick={() => dispatch({type: "lower"})}>прописными</button>
                 <button onClick={() => dispatch({type: "cut"})}>вынуть</button>
             </div>
+
+            <div className="App">
+                <p>8 using fetch component</p>
+                {login}
+                {/*<DataComponent uri='https://api.github.com/users/antipn'/>*/}
+                <DataComponent uri={`https://api.github.com/users/${login}`}/>
+
+            </div>
+
         </>
     );
 }
