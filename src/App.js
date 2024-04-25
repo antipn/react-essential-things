@@ -27,11 +27,17 @@ function App() {
         },
     ];
 
+    const addExpenseHandler = (data) => {
+
+        console.log("Getting data from children 2 part  in App.js", data)
+
+    }
+
     return (
         <div>
-            <NewExpense/>
+            <NewExpense onAddData={addExpenseHandler}/>
             <div className='expenses'>
-                <Expenses data={expenses}/>
+                <Expenses data={expenses} />
             </div>
         </div>
     );

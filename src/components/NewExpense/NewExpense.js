@@ -1,13 +1,24 @@
 import './NewExpense.css'
 import NewExpenseForm from "../NewExpenseForm/NewExpenseForm";
 
-const NewExpense = () => {
+const NewExpense = (props) => {
 
-    return (
-        <div className='new-expense'>
-            <NewExpenseForm/>
-        </div>
-    )
-}
+    //up linking data (from children to parent)
+    const saveExpenseDataHandler = (enteredExpense) => {
 
-export default NewExpense;
+        const expenseData = {
+            ...enteredExpense,
+            id: Math.random().toString()
+        }
+        console.log("Got data from children element 1 part in NewExpsense element", expenseData)
+        props.onAddData(expenseData)
+    }
+
+        return (
+            <div className='new-expense'>
+                <NewExpenseForm onSaveExpenseData={saveExpenseDataHandler}/>
+            </div>
+        )
+    }
+
+    export default NewExpense;

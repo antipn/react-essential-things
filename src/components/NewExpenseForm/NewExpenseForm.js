@@ -1,56 +1,32 @@
 import './NewExpenseForm.css'
-// import Calendar from "react-calendar";
 import {Calendar} from 'primereact/calendar';
 import {useState} from "react";
 
-const NewExpenseForm = () => {
+const NewExpenseForm = (props) => {
+
+    const defaultDate = new Date()
+    const defaultAmount = 0
+    const defaultTitle = 'Enter expense name'
 
 
-    const [newTitle, setnewTitle] = useState('');
-    const [newAmount, setnewAmount] = useState('');
-    const [newDate, setnewDate] = useState('');
+    const [newTitle, setnewTitle] = useState(defaultTitle);
+    const [newAmount, setnewAmount] = useState(defaultAmount);
+    const [newDate, setnewDate] = useState(defaultDate);
 
-
-    // const [userInput, setUserInput] = useState({
-    //     newTitle: '',
-    //     newAmount: '',
-    //     newDate: ''
-    // })
 
     const titleChangeHandler = (event) => {
         setnewTitle(event.target.value)
-        // setUserInput({
-        //         ...userInput,
-        //         newTitle: event.target.value
-        //     }
-        // )
-        // setUserInput(prevState => {
-        //     return {...prevState, newTitle: event.target.value}
-        // })
+
     }
 
     const amountChangeHandler = (event) => {
         setnewAmount(event.target.value)
-        // setUserInput(
-        //     {
-        //         ...userInput,
-        //         newAmount: event.target.value
-        //     }
-        // )
-        // setUserInput(prevState => {
-        //     return {...prevState, newAmount: event.target.value}
-        // })
+
     }
 
     const dateChangeHandler = (event) => {
         setnewDate(event.target.value)
-        // setUserInput({
-        //     ...userInput,
-        //     newDate: event.target.value
-        // })
-        // setUserInput(prevState => {
-        //     return {...prevState, newDate: event.target.value}
-        // })
+
     }
 
     const formSubmitHandler = (event) => {
@@ -61,7 +37,11 @@ const NewExpenseForm = () => {
             amount: newAmount,
             date: new Date(newDate)
         }
-        console.log(enteredData)
+        props.onSaveExpenseData(enteredData)
+        setnewTitle(defaultTitle)
+        setnewAmount(defaultAmount)
+        setnewDate(defaultDate)
+
     }
 
     return (
@@ -69,15 +49,30 @@ const NewExpenseForm = () => {
             <div className='new-expense__controls'>
                 <div className='new-expense__control'>
                     <label>Title</label>
-                    <input type="text" onChange={titleChangeHandler}/>
+                    <input
+                        type="text"
+                        value={newTitle}
+                        onChange={titleChangeHandler}
+                    onFocus={()=> setnewTitle('')}/>
                 </div>
                 <div className='new-expense__control'>
                     <label>Amount</label>
-                    <input type="number" onChange={amountChangeHandler} min='0.01' step='0.01'/>
+                    <input
+                        type="number"
+                        value={newAmount}
+                        onChange={amountChangeHandler}
+                        min='0.01'
+                        step='0.01'/>
                 </div>
                 <div className='new-expense__control'>
                     <label>Date</label>
-                    <Calendar onChange={dateChangeHandler} dateFormat="dd-mm-yy" showIcon showButtonBar/>
+                    <Calendar
+                        value={newDate}
+
+                        onChange={dateChangeHandler}
+                        dateFormat="dd-mm-yy"
+                        showIcon
+                        showButtonBar/>
 
                 </div>
             </div>
