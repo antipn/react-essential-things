@@ -1,6 +1,6 @@
 import './App.css';
 import Expenses from "./components/Expenses_components/Expenses/Expenses";
-import "./components/Expenses/Expenses.css"
+import "./components/Expenses_components/Expenses/Expenses.css"
 import NewExpense from "./components/NewExpense_component/NewExpense/NewExpense";
 import {useState} from "react";
 

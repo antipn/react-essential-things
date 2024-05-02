@@ -3,6 +3,7 @@ import Card from "../Card/Card";
 import ExpensesFilter from "../ExpensesFilter/ExpensesFilter";
 import {Fragment, useState} from "react";
 import ExpensesList from "../ExpensesList/ExpensesList";
+import ExpensesChart from "../ExpensesChart/ExpensesChart";
 
 function Expenses(props) {
 
@@ -24,6 +25,7 @@ function Expenses(props) {
         <Fragment>
             <Card className='expenses'>
             <ExpensesFilter selected={filteredYear} onChageFilter={filterChangeHandler}/>
+                <ExpensesChart data={filteredExpenses}/>
                 <ExpensesList data={filteredExpenses}/>
             </Card>
         </Fragment>
