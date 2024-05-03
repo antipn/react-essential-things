@@ -32,7 +32,7 @@ const NewExpenseForm = (props) => {
         //getting vars from state
         const enteredData = {
             title: newTitle,
-            amount: newAmount,
+            amount: +newAmount,
             date: new Date(newDate)
         }
         props.onSaveExpenseData(enteredData)
